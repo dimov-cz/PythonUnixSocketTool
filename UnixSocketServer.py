@@ -52,7 +52,7 @@ class UnixSocketServer:
         
         for client in readable:
             try:
-                msg = client.recv(1024).decode('utf-8')
+                msg = client.recv(buffer_size).decode('utf-8')
                 if not msg:
                     raise Exception("Read failed")
                 #print(f"Received from #{client.fileno()}: {msg}")
