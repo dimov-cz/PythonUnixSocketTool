@@ -1,6 +1,7 @@
 import socket
 import os
 import select
+import logging
 
 class UnixSocketServer:
     socket_file = None
@@ -33,7 +34,7 @@ class UnixSocketServer:
     def serviceLoop(self):
         try:
             client, addr = self.sock.accept()
-            print(f"Connection from #{client.fileno()}")
+            logging.info(f"Connection from #{client.fileno()}")
             self.clients.append(client)
             self.invite(client)
         except socket.error as e:
@@ -55,14 +56,14 @@ class UnixSocketServer:
                 msg = client.recv(buffer_size).decode('utf-8')
                 if not msg:
                     raise Exception("Read failed")
-                #print(f"Received from #{client.fileno()}: {msg}")
+                logging.debug(f"Received from #{client.fileno()}: {msg}")
                 return client, msg
             except Exception as e:
-                print(f"Closing #{client.fileno()}")
+                logging.info(f"Closing #{client.fileno()}")
                 self.clients.remove(client)
         return None, None
     
     def invite(self, client):
-        print(f"Connected #{client.fileno()}...")
+        logging.info(f"Connected #{client.fileno()}...")
         #self.write(client, "Hello, world!\n")
         pass
